@@ -75,7 +75,7 @@ CREATE TABLE Ventas (
     id_venta INT AUTO_INCREMENT PRIMARY KEY,
     id_cliente INT,
     id_empleado INT,
-    fecha_venta DATETIME,
+    fecha_venta DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     total_venta FLOAT
 );
 
@@ -112,12 +112,12 @@ MODIFY COLUMN fecha_venta DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
 -- Relación Detalles_Compras -> Compras y Productos
 ALTER TABLE Detalles_Compras
-ADD CONSTRAINT fk_compra_detalle FOREIGN KEY (id_compra) REFERENCES Compras (id_compra),
+ADD CONSTRAINT fk_compra_detalle FOREIGN KEY (id_compra) REFERENCES Compras (id_compra) ON DELETE CASCADE,
 ADD CONSTRAINT fk_producto_compra FOREIGN KEY (id_producto) REFERENCES Productos (id_producto);
 
 -- Relación Detalles_Ventas -> Ventas y Productos
 ALTER TABLE Detalles_Ventas
-ADD CONSTRAINT fk_venta_detalle FOREIGN KEY (id_venta) REFERENCES Ventas (id_venta),
+ADD CONSTRAINT fk_venta_detalle FOREIGN KEY (id_venta) REFERENCES Ventas (id_venta)ON DELETE CASCADE,
 ADD CONSTRAINT fk_producto_venta FOREIGN KEY (id_producto) REFERENCES Productos (id_producto);
 
 --Eliminar la clave foránea actual fk_venta_detalle:

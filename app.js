@@ -2,8 +2,17 @@
 import express from 'express';
 import cors from 'cors';
 
+
 //Importar las rutas
 import rutasCategorias from './src/routes/categorias.routes.js';
+import rutasProductos from './src/routes/productos.routes.js';
+import rutasVentas from './src/routes/ventas.routes.js';
+import rutasClientes from './src/routes/clientes.routes.js';
+import rutasUsuarios from './src/routes/usuarios.routes.js';
+import rutasEmpleados from './src/routes/empleados.routes.js';
+import rutasCompras from './src/routes/compras.routes.js';
+import rutasDetalles_Compras from './src/routes/detalles_compras.routes.js';
+import rutasDetalles_Ventas from './src/routes/detalles_ventas.routes.js';   
 
 // Crear la aplicación de Express
 const app = express();
@@ -20,8 +29,15 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // Rutas
 app.use('/api', rutasCategorias);
+app.use('/api', rutasProductos);
+app.use('/api', rutasVentas);
+app.use('/api', rutasClientes);
+app.use('/api', rutasUsuarios);
+app.use('/api', rutasEmpleados);
+app.use('/api', rutasCompras);
+app.use('/api', rutasDetalles_Compras);
+app.use('/api', rutasDetalles_Ventas);
 
-// prefijo
 
 // Manejo de rutas no encontradas
 app.use((req, res, next) => {
