@@ -55,3 +55,26 @@ export const eliminarVenta= async (req, res) => {
 
 }
 };
+
+export const actualizarVenta = async (req, res) => {
+    try {
+        const {id_venta} = req.params;
+        const datos = req.body;
+
+
+        const {result} = await pool.query(
+            'UPDATE ventas SET ? WHERE id_venta = ?',
+            [datos, id_venta]
+        );
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                mensaje: ` venta con ID ${id_venta} no encontrada.`
+            });
+        }
+        res.status(200).json({
+            mensaje: `venta con ID ${id_venta} actualizada.`
+        });
+    }catch (error) {
+        return res.status(500).json({ mensaje: 'Error al actualizar la venta.', error });
+    }
+};

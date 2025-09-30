@@ -83,3 +83,26 @@ export const eliminarDetalle_Venta= async (req, res) => {
 
 }
 };
+
+export const actualizarDetalle_VentaPatch = async (req, res) => {
+    try {
+        const {id_detalle_venta} = req.params;
+        const datos = req.body;
+
+
+        const {result} = await pool.query(
+            'UPDATE detalle_ventas SET ? WHERE id_detalle_venta = ?',
+            [datos, id_detalle_venta]
+        );
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                mensaje: ` detalle_venta con ID ${id_detalle_venta} no encontrada.`
+            });
+        }
+        res.status(200).json({
+            mensaje: `detalle_venta con ID ${id_detalle_venta} actualizada.`
+        });
+    }catch (error) {
+        return res.status(500).json({ mensaje: 'Error al actualizar la detalle_venta.', error });
+    }
+};

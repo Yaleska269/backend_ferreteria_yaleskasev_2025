@@ -11,4 +11,5 @@ router.get('/venta/:id_detalles_venta', obtenerDetalles_Venta);
 // Ruta para eliminar una detalles_venta por su ID
 router.delete('/eliminardetalles_venta/:id_detalles_venta', eliminarDetalle_Venta);
 
+
 export default router;

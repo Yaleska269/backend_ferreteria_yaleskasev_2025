@@ -55,3 +55,27 @@ export const eliminarUsuario= async (req, res) => {
 
 }
 };
+
+// Actualizar 
+export const actualizarUsuario = async (req, res) => {
+    try {
+        const {id_usuario} = req.params;
+        const datos = req.body;
+
+
+        const {result} = await pool.query(
+            'UPDATE usuarios SET ? WHERE id_usuario = ?',
+            [datos, id_detalle_venta]
+        );
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                mensaje: ` usuario con ID ${id_usuario} no encontrada.`
+            });
+        }
+        res.status(200).json({
+            mensaje: `usuario con ID ${id_usuario} actualizada.`
+        });
+    }catch (error) {
+        return res.status(500).json({ mensaje: 'Error al actualizar la usuario.', error });
+    }
+};

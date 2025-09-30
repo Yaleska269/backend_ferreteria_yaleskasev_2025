@@ -73,3 +73,31 @@ export const eliminarCategoria = async (req, res) => {
 
 }
 };
+
+// Actualizar una categoría por su ID//..........................................................................................
+
+// Controlador para actualizar una categoria por su ID
+
+export const actualizarCategoria = async (req, res) => {
+    try {
+        const {id_categoria} = req.params;
+        const datos = req.body;
+
+
+        const [result] = await pool.query(
+            'UPDATE categorias SET ? WHERE id_categoria = ?',
+            [datos, id_categoria]
+        );
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                mensaje: ` Categoria con ID ${id_categoria} no encontrada.`
+            });
+        }
+        res.status(200).json({
+            mensaje: `Categoria con ID ${id_categoria} actualizada.`
+        });
+    }catch (error) {
+        return res.status(500).json({ mensaje: 'Error al actualizar la categoria.', error });
+    }
+};
+

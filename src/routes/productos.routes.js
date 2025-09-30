@@ -11,4 +11,5 @@ router.get('/producto/:id_producto', obtenerProducto);
 // Ruta para eliminar un producto por su ID
 router.delete('/eliminarproducto/:id_producto', eliminarProducto);
 
+
 export default router;

@@ -83,3 +83,26 @@ export const eliminarDetalle_Compra= async (req, res) => {
 
 }
 };
+
+export const actualizarDetalle_Compra = async (req, res) => {
+    try {
+        const {id_detalle_compra} = req.params;
+        const datos = req.body;
+
+
+        const {result} = await pool.query(
+            'UPDATE detalle_compras SET ? WHERE id_detalle_compra = ?',
+            [datos, id_detalle_compra]
+        );
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                mensaje: ` detalle_compra con ID ${id_detalle_compra} no encontrada.`
+            });
+        }
+        res.status(200).json({
+            mensaje: `detalle_compra con ID ${id_detalle_compra} actualizada.`
+        });
+    }catch (error) {
+        return res.status(500).json({ mensaje: 'Error al actualizar la detalle_compra.', error });
+    }
+};
