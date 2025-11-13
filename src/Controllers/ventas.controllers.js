@@ -17,7 +17,7 @@ error: error
 export const obtenerVenta = async (req, res) => {
 try {
 const id_venta = req.params.id_venta; // Una forma de hacerlo
-const [result] = await pool.query('SELECT * FROM ca WHERE id_venta = ?', [req.params.id_venta]);
+const [result] = await pool.query('SELECT * FROM Ventas WHERE id_venta = ?', [req.params.id_venta]);
 
 if (result.length <= 0) {
 return res.status(404).json({
@@ -29,6 +29,26 @@ res.json(result[0]);
 } catch (error) {
 return res.status(500).json({
 mensaje: 'Ha ocurrido un error al leer los datos de las ventas.'
+});
+}
+};
+
+// Registrar una nueva Venta
+export const registrarVenta = async (req, res) => {
+try {
+const { id_cliente, id_empleado,
+        total_venta  } = req.body;
+
+const [result] = await pool.query(
+'INSERT INTO ventas (id_cliente, id_empleado, total_venta) VALUES (?, ?, ?)',
+[id_cliente, id_empleado, total_venta]
+);
+
+res.status(201).json({ id_venta: result.insertId });
+} catch (error) {
+return res.status(500).json({
+mensaje: 'Ha ocurrido un error al registrar la venta.',
+error: error
 });
 }
 };
@@ -58,23 +78,24 @@ export const eliminarVenta= async (req, res) => {
 
 export const actualizarVenta = async (req, res) => {
     try {
-        const {id_venta} = req.params;
-        const datos = req.body;
-
-
+        const {id_venta} = req.params.id_venta;
+        const {id_cliente, id_empleado, fecha_venta, total_venta} = req.body;
         const {result} = await pool.query(
-            'UPDATE ventas SET ? WHERE id_venta = ?',
-            [datos, id_venta]
+            'UPDATE ventas SET ? WHERE id_cliente = ?, id_empleado = ?, fecha_venta = ?, total_venta = ? WHERE id_venta = ?',
+            [id_cliente, id_empleado, fecha_venta, total_venta, id_venta]
         );
         if (result.affectedRows === 0) {
             return res.status(404).json({
-                mensaje: ` venta con ID ${id_venta} no encontrada.`
+                mensaje: ` Error al actualizar la venta. El ID ${id_venta} no fue encontrada.`
             });
         }
         res.status(200).json({
-            mensaje: `venta con ID ${id_venta} actualizada.`
+            mensaje: `venta con ID ${id_venta} actualizado exitosamente.`
         });
     }catch (error) {
-        return res.status(500).json({ mensaje: 'Error al actualizar la venta.', error });
+        return res.status(500).json({ 
+            mensaje: 'Error al actualizar la venta.',
+            error: error
+        });
     }
 };

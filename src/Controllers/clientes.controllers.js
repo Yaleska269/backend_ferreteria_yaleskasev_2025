@@ -33,7 +33,7 @@ mensaje: 'Ha ocurrido un error al leer los datos de las clientes.'
 }
 };
 
-// Registrar una nueva Cliente
+// Registrar una nuevo Cliente
 export const registrarCliente = async (req, res) => {
 try {
 const { 
@@ -47,7 +47,7 @@ const {
 } = req.body;
 
 const [result] = await pool.query(
-'INSERT INTO clientes ( primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, celular,direccion,cedula) VALUES (?, ?, ?, ?, ?, ?, ?)',
+'INSERT INTO clientes ( primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, celular, direccion, cedula) VALUES (?, ?, ?, ?, ?, ?, ?)',
 [ primer_nombre,
     segundo_nombre,
     primer_apellido,
@@ -64,6 +64,7 @@ error: error
 });
 }
 };
+
 
 // Eliminar una cliente por su ID 
 export const eliminarCliente = async (req, res) => {
@@ -92,25 +93,27 @@ export const eliminarCliente = async (req, res) => {
 
 export const actualizarCliente = async (req, res) => {
     try {
-        const {id_cliente} = req.params;
+        const { id_cliente } = req.params;
         const datos = req.body;
 
-
-        const {result} = await pool.query(
+        const [result] = await pool.query(
             'UPDATE clientes SET ? WHERE id_cliente = ?',
             [datos, id_cliente]
         );
+
         if (result.affectedRows === 0) {
             return res.status(404).json({
-                mensaje: ` Cliente con ID ${id_cliente} no encontrada.`
+                mensaje: `Cliente con ID ${id_cliente} no encontrada.`
             });
         }
+
         res.status(200).json({
             mensaje: `Cliente con ID ${id_cliente} actualizada.`
         });
-    }catch (error) {
+    } catch (error) {
         return res.status(500).json({ mensaje: 'Error al actualizar la cliente.', error });
     }
 };
+
 
 

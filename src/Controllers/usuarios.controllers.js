@@ -17,7 +17,7 @@ error: error
 export const obtenerUsuario = async (req, res) => {
 try {
 const id_usuario = req.params.id_usuario; // Una forma de hacerlo
-const [result] = await pool.query('SELECT * FROM ca WHERE id_usuario = ?', [req.params.id_usuario]);
+const [result] = await pool.query('SELECT * FROM usuarios WHERE id_usuario = ?', [req.params.id_usuario]);
 
 if (result.length <= 0) {
 return res.status(404).json({
@@ -59,23 +59,46 @@ export const eliminarUsuario= async (req, res) => {
 // Actualizar 
 export const actualizarUsuario = async (req, res) => {
     try {
-        const {id_usuario} = req.params;
+        const { id_usuario } = req.params;
         const datos = req.body;
 
-
-        const {result} = await pool.query(
+        const [result] = await pool.query(
             'UPDATE usuarios SET ? WHERE id_usuario = ?',
-            [datos, id_detalle_venta]
+            [datos, id_usuario]
         );
+
         if (result.affectedRows === 0) {
             return res.status(404).json({
-                mensaje: ` usuario con ID ${id_usuario} no encontrada.`
+                mensaje: `Usuario con ID ${id_usuario} no encontrado.`
             });
         }
+
         res.status(200).json({
-            mensaje: `usuario con ID ${id_usuario} actualizada.`
+            mensaje: `Usuario con ID ${id_usuario} actualizado correctamente.`
         });
-    }catch (error) {
-        return res.status(500).json({ mensaje: 'Error al actualizar la usuario.', error });
+
+    } catch (error) {
+        return res.status(500).json({
+            mensaje: 'Error al actualizar el usuario.',
+            error: error.message
+        });
     }
+};
+
+
+// Registrar una nuevo usuario
+export const registrarUsuario = async (req, res) => {
+try {
+const { usuario, contraseña } = req.body;
+const [result] = await pool.query(
+'INSERT INTO usuarios (usuario, contraseña) VALUES (?, ?)',
+[usuario, contraseña]
+);
+res.status(201).json({ id_usuario: result.insertId });
+} catch (error) {
+return res.status(500).json({
+mensaje: 'Ha ocurrido un error al registrar el usuario.',
+error: error
+});
+}
 };

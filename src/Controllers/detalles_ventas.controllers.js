@@ -17,7 +17,7 @@ export const obtenerDetalles_Ventas = async (req, res) => {
 export const obtenerDetalles_Venta = async (req, res) => {
     try {
         const id_detalles_venta = req.params.id_detalles_venta; // Una forma de hacerlo
-        const [result] = await pool.query('SELECT * FROM clientes WHERE id_detalles_compra = ?', [req.params.id_detalles_venta]);
+        const [result] = await pool.query('SELECT * FROM Detalles_Ventas WHERE id_detalles_compra = ?', [req.params.id_detalles_venta]);
 
         if (result.length <= 0) {
             return res.status(404).json({
@@ -84,7 +84,7 @@ export const eliminarDetalle_Venta= async (req, res) => {
 }
 };
 
-export const actualizarDetalle_VentaPatch = async (req, res) => {
+export const actualizarDetalle_Venta = async (req, res) => {
     try {
         const {id_detalle_venta} = req.params;
         const datos = req.body;
